@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# Автор: Пензов Сергей
 # картинки 400 х 400 маркировка правой нижней клетки серым цветом + шум
 
 # Подключение модулей
@@ -80,7 +82,7 @@ def exchange(curr, near):
         moves += 1
         label_3 = tkinter.Label(main_window, text=str(moves))
         label_3.grid(row=5, column=1)
-        if IsSolution():
+        if IsSolution() and moves>0:
             label_4 = tkinter.Label(main_window, text='Победа!')
             label_4.grid(row=6, column=0)
             EndOfGame=True
@@ -94,7 +96,7 @@ def key_press(btn):
     near = None  # <- None - специальное значение в Питоне - "ничто"
 
     global EndOfGame # При окончании игры отключаем клавиши
-    EndOfGame = False
+    # EndOfGame = False
     if not(EndOfGame):
         if btn == 'r' and curr.column > 0:
             # print('Вправо')
@@ -125,7 +127,7 @@ def mix_up():
     ''' Перемешивание клеток
         SIDE ** 4 - взято для лучшего перемешивания,
          т.к. не все вызовы функции нажатия кнопок
-         будут приводить клеток к движению на поле
+         будут приводить к движению клеток на поле
     '''
     global moves
     buttons = ['d', 'u', 'l', 'r']
@@ -234,18 +236,20 @@ for i in range(SIDE):
 curr = labels[-1]
 
 
-# EndOfGame=False
+
 label_2 = tkinter.Label(main_window, text='Ходов = ')
 label_2.grid(row=5,column=0)
 
 # mix_up
-main_window.after(2000, mix_up)
+EndOfGame=False
+# if moves<=0 and IsSolution():
+main_window.after(2000, mix_up) # Перемешивание после временной задержки
+
 
 main_window.bind('<Up>', lambda x: key_press('u'))
 main_window.bind('<Down>', lambda x: key_press('d'))
 main_window.bind('<Left>', lambda x: key_press('l'))
 main_window.bind('<Right>', lambda x: key_press('r'))
-main_window.bind('<q>', lambda x: exit(0))
-
+# main_window.bind('<q>', lambda x: exit(0)) # Почему-то не работало
 
 main_window.mainloop()
